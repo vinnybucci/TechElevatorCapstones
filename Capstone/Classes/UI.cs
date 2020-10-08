@@ -20,14 +20,15 @@ namespace Capstone.Classes
                 char selection = Console.ReadKey().KeyChar;
                 try
                 {
+                    VendingMachine vm = new VendingMachine(0);
                     if (selection == '1')
                     {
-                        Display();
+                        vm.Display();
                         shouldContinue = true;
                     }
                     else if (selection == '2')
                     {
-                        Purchase();
+                        //Purchase();
                         shouldContinue = true;
                     }
                     else if (selection == '3')
@@ -36,7 +37,7 @@ namespace Capstone.Classes
                     }
                     else if (selection == '4')
                     {
-                        SalesReport();
+                        //SalesReport();
                     }
                 }
                 catch (Exception e)

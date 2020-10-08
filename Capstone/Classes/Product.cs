@@ -10,11 +10,23 @@ namespace Capstone.Classes
         //properties: slot location, product name, price, type
         //methods:
 
-        public string slotLocation { get; set; }
-        public string productName { get; set; }
-        public int price { get; private set; }
-        public string type { get; set; }
+        public string SlotLocation { get; set; }
+        public string ProductName { get; set; }
+        public string Price { get; private set; }
+        public string Type { get; set; }
+        public int Stock { get; set; } = 5;
 
+        public Product(string slotLocation, string productName, string price, string type)
+        {
+            SlotLocation = slotLocation;
+            ProductName = productName;
+            Price = price;
+            Type = type;
+        }
+        public Product()
+        {
+
+        }
 
 
     }
