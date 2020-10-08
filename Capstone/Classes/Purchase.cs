@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Capstone.Classes
 {
-    class Purchase
+    public class Purchase
     {
+        //purchase: give change, feed money, selection
+
+
     }
 }
