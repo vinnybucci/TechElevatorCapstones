@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Capstone.Classes
 {
-    class Product
+    public class Product
     {
+        //properties: Slot location, Product name, Price, Type
     }
 }
