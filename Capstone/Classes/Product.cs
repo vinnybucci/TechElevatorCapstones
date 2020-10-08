@@ -7,8 +7,6 @@ namespace Capstone.Classes
 {
     public class Product
     {
-        //properties: slot location, product name, price, type
-        //methods:
 
         public string SlotLocation { get; set; }
         public string ProductName { get; set; }
