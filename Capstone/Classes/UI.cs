@@ -11,6 +11,7 @@ namespace Capstone.Classes
 
         public void Menu()
         {
+            Product product = new Product();
             bool shouldContinue = false;
             do
             {
@@ -22,7 +23,7 @@ namespace Capstone.Classes
                 string selection = Console.ReadLine();
                 try
                 {
-                    Purchase purchase = new Purchase(0);
+                    Purchase purchase = new Purchase(0, "", product);
                     if (selection == "1")
                     {
                         purchase.Display();

@@ -9,7 +9,7 @@ namespace Capstone.Classes
     {
         //add system.io, create log.txt datetime, method, action(balance/feed money/selection(product name, product location)), amount entered +- balance
         private const string FILENAME = "log.txt";
-        public static bool WriteRecord(Purchase purchase )
+        public static bool WriteRecord(Purchase purchase)
         {
             bool success = false;
             string directory = Environment.CurrentDirectory;
@@ -18,7 +18,7 @@ namespace Capstone.Classes
             {
                 using (StreamWriter sw = new StreamWriter(fullPath, true))
                 {
-                    sw.WriteLine(DateTime.Now.ToString()+purchase.MethodName);
+                    sw.WriteLine($"{DateTime.Now} {purchase.LogData()}  ");
           
                 }
                 success = true;

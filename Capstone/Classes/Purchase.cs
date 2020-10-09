@@ -14,12 +14,15 @@ namespace Capstone.Classes
 
     {
         public decimal Balance { get; set; }
-        public string MethodName { get; set; }
+        public string MethodName { get; set; } = "";
         List<Product> Products { get; set; } = new List<Product>();
+        public Product Selection { get; set; } = new Product();
 
-        public Purchase(decimal balance)
+        public Purchase(decimal balance, string methodName, Product selection)
         {
             Balance = balance;
+            MethodName = methodName;
+            Selection = selection;
         }
 
         Logger logger = new Logger();
@@ -111,8 +114,7 @@ namespace Capstone.Classes
         }
         public void FeedMoney()
         {
-            MethodName = "FEED MONEY";
-            Purchase purchase = new Purchase(0);
+            Purchase purchase = new Purchase(0, MethodName, Selection);
 
             bool continueFeedMoney = false;
             do
@@ -131,13 +133,14 @@ namespace Capstone.Classes
                 }
             }
             while (continueFeedMoney);
+            MethodName = "FEED MONEY";
             Logger.WriteRecord(purchase);
             PurchaseMenu();
             
         }
         public void SelectItem()
         {
-            Purchase purchase = new Purchase(0);
+            Purchase purchase = new Purchase(0, MethodName, Selection);
             Display();
             Console.WriteLine("Please enter your item in the format of A1|B1|C1|D1");
             string selection = Console.ReadLine();
@@ -152,11 +155,14 @@ namespace Capstone.Classes
                         case "A1":
                             if (Products[0].Stock > 0)
                             {
+                                Selection = Products[0];
+
                                 Balance -= decimal.Parse(Products[0].Price);
                                 Console.WriteLine($"{Products[0].ProductName} {Products[0].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
                                 Products[0].Stock -= 1;
+                                MethodName = ($"{Products[0].ProductName} {Products[0].SlotLocation}");
                             }else if(Products[0].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
@@ -170,6 +176,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
                                 Products[1].Stock -= 1;
+                                MethodName = ($"{Products[1].ProductName} {Products[1].SlotLocation}");
+
                             }
                             else if (Products[1].Stock == 0)
                             {
@@ -184,6 +192,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
                                 Products[2].Stock -= 1;
+                                MethodName = ($"{Products[2].ProductName} {Products[2].SlotLocation}");
+
                             }
                             else if (Products[2].Stock == 0)
                             {
@@ -198,6 +208,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
                                 Products[3].Stock -= 1;
+                                MethodName = ($"{Products[3].ProductName} {Products[3].SlotLocation}");
+
                             }
                             else if (Products[3].Stock == 0)
                             {
@@ -212,6 +224,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
                                 Products[4].Stock -= 1;
+                                MethodName = ($"{Products[4].ProductName} {Products[4].SlotLocation}");
+
                             }
                             else if (Products[4].Stock == 0)
                             {
@@ -226,6 +240,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
                                 Products[5].Stock -= 1;
+                                MethodName = ($"{Products[5].ProductName} {Products[5].SlotLocation}");
+
                             }
                             else if (Products[5].Stock == 0)
                             {
@@ -240,6 +256,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
                                 Products[6].Stock -= 1;
+                                MethodName = ($"{Products[6].ProductName} {Products[6].SlotLocation}");
+
                             }
                             else if (Products[6].Stock == 0)
                             {
@@ -254,6 +272,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
                                 Products[7].Stock -= 1;
+                                MethodName = ($"{Products[7].ProductName} {Products[7].SlotLocation}");
+
                             }
                             else if (Products[7].Stock == 0)
                             {
@@ -268,6 +288,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
                                 Products[8].Stock -= 1;
+                                MethodName = ($"{Products[8].ProductName} {Products[8].SlotLocation}");
+
                             }
                             else if (Products[8].Stock == 0)
                             {
@@ -282,6 +304,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
                                 Products[9].Stock -= 1;
+                                MethodName = ($"{Products[9].ProductName} {Products[9].SlotLocation}");
+
                             }
                             else if (Products[9].Stock == 0)
                             {
@@ -296,6 +320,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
                                 Products[10].Stock -= 1;
+                                MethodName = ($"{Products[10].ProductName} {Products[10].SlotLocation}");
+
                             }
                             else if (Products[10].Stock == 0)
                             {
@@ -310,6 +336,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
                                 Products[11].Stock -= 1;
+                                MethodName = ($"{Products[11].ProductName} {Products[11].SlotLocation}");
+
                             }
                             else if (Products[11].Stock == 0)
                             {
@@ -324,6 +352,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
                                 Products[12].Stock -= 1;
+                                MethodName = ($"{Products[12].ProductName} {Products[12].SlotLocation}");
+
                             }
                             else if (Products[12].Stock == 0)
                             {
@@ -338,6 +368,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
                                 Products[13].Stock -= 1;
+                                MethodName = ($"{Products[13].ProductName} {Products[13].SlotLocation}");
+
                             }
                             else if (Products[13].Stock == 0)
                             {
@@ -352,6 +384,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
                                 Products[14].Stock -= 1;
+                                MethodName = ($"{Products[14].ProductName} {Products[14].SlotLocation}");
+
                             }
                             else if (Products[14].Stock == 0)
                             {
@@ -366,6 +400,8 @@ namespace Capstone.Classes
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
                                 Products[15].Stock -= 1;
+                                MethodName = ($"{Products[15].ProductName} {Products[15].SlotLocation}");
+
                             }
                             else if (Products[15].Stock == 0)
                             {
@@ -396,7 +432,7 @@ namespace Capstone.Classes
         }
         public void FinishTransaction()
         {
-            Purchase purchase = new Purchase(0);
+            Purchase purchase = new Purchase(0, MethodName, Selection);
 
 
             decimal quarter = 0.25M;
@@ -430,6 +466,7 @@ namespace Capstone.Classes
                     }
                 } 
                 Console.WriteLine($"Your change is {change[quarter]} Quarters, {change[dime]} Dimes, and {change[nickel]} Nickels.");
+                MethodName = "GIVE CHANGE";
                 Logger.WriteRecord(purchase);
                 Menu();
             }
@@ -439,9 +476,9 @@ namespace Capstone.Classes
             }
             
         }
-        //public string LogData()
-        //{
-        //    return ($"{DateTime.Now} {}");
-        //}
+        public string LogData()
+        {
+            return ($"{MethodName} {Balance} {Balance-decimal.Parse(Selection.Price)} ");
+        }
     }
 }
