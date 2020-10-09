@@ -13,15 +13,16 @@ namespace Capstone.Classes
     public class Purchase : UI
 
     {
-        public double Balance { get; set; }
+        public decimal Balance { get; set; }
+        public string MethodName { get; set; }
         List<Product> Products { get; set; } = new List<Product>();
 
-        public Purchase(int balance)
+        public Purchase(decimal balance)
         {
             Balance = balance;
         }
 
-
+        Logger logger = new Logger();
         public void Display()
         {
             string filePath = @"C:\Users\Student\workspace\Capstones\csharp-capstone-module-1-team-3\vendingmachine.csv";
@@ -110,6 +111,9 @@ namespace Capstone.Classes
         }
         public void FeedMoney()
         {
+            MethodName = "FEED MONEY";
+            Purchase purchase = new Purchase(0);
+
             bool continueFeedMoney = false;
             do
             {
@@ -121,17 +125,19 @@ namespace Capstone.Classes
                 }
                 else
                 {
-                    double currentMoneyProvided = double.Parse(input);
+                    decimal currentMoneyProvided = decimal.Parse(input);
                     Balance += currentMoneyProvided;
                     continueFeedMoney = true;
                 }
             }
             while (continueFeedMoney);
+            Logger.WriteRecord(purchase);
             PurchaseMenu();
+            
         }
         public void SelectItem()
         {
-
+            Purchase purchase = new Purchase(0);
             Display();
             Console.WriteLine("Please enter your item in the format of A1|B1|C1|D1");
             string selection = Console.ReadLine();
@@ -146,7 +152,7 @@ namespace Capstone.Classes
                         case "A1":
                             if (Products[0].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[0].Price);
+                                Balance -= decimal.Parse(Products[0].Price);
                                 Console.WriteLine($"{Products[0].ProductName} {Products[0].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
@@ -159,7 +165,7 @@ namespace Capstone.Classes
                         case "A2":
                             if (Products[1].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[1].Price);
+                                Balance -= decimal.Parse(Products[1].Price);
                                 Console.WriteLine($"{Products[1].ProductName} {Products[1].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
@@ -173,7 +179,7 @@ namespace Capstone.Classes
                         case "A3":
                             if (Products[2].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[2].Price);
+                                Balance -= decimal.Parse(Products[2].Price);
                                 Console.WriteLine($"{Products[2].ProductName} {Products[2].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
@@ -187,7 +193,7 @@ namespace Capstone.Classes
                         case "A4":
                             if (Products[3].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[3].Price);
+                                Balance -= decimal.Parse(Products[3].Price);
                                 Console.WriteLine($"{Products[3].ProductName} {Products[3].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
@@ -201,7 +207,7 @@ namespace Capstone.Classes
                         case "B1":
                             if (Products[4].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[4].Price);
+                                Balance -= decimal.Parse(Products[4].Price);
                                 Console.WriteLine($"{Products[4].ProductName} {Products[4].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
@@ -215,7 +221,7 @@ namespace Capstone.Classes
                         case "B2":
                             if (Products[5].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[5].Price);
+                                Balance -= decimal.Parse(Products[5].Price);
                                 Console.WriteLine($"{Products[5].ProductName} {Products[5].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
@@ -229,7 +235,7 @@ namespace Capstone.Classes
                         case "B3":
                             if (Products[6].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[6].Price);
+                                Balance -= decimal.Parse(Products[6].Price);
                                 Console.WriteLine($"{Products[6].ProductName} {Products[6].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
@@ -243,7 +249,7 @@ namespace Capstone.Classes
                         case "B4":
                             if (Products[7].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[7].Price);
+                                Balance -= decimal.Parse(Products[7].Price);
                                 Console.WriteLine($"{Products[7].ProductName} {Products[7].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
@@ -257,7 +263,7 @@ namespace Capstone.Classes
                         case "C1":
                             if (Products[8].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[8].Price);
+                                Balance -= decimal.Parse(Products[8].Price);
                                 Console.WriteLine($"{Products[8].ProductName} {Products[8].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
@@ -271,7 +277,7 @@ namespace Capstone.Classes
                         case "C2":
                             if (Products[9].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[9].Price);
+                                Balance -= decimal.Parse(Products[9].Price);
                                 Console.WriteLine($"{Products[9].ProductName} {Products[9].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
@@ -285,7 +291,7 @@ namespace Capstone.Classes
                         case "C3":
                             if (Products[10].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[10].Price);
+                                Balance -= decimal.Parse(Products[10].Price);
                                 Console.WriteLine($"{Products[10].ProductName} {Products[10].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
@@ -299,7 +305,7 @@ namespace Capstone.Classes
                         case "C4":
                             if (Products[11].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[11].Price);
+                                Balance -= decimal.Parse(Products[11].Price);
                                 Console.WriteLine($"{Products[11].ProductName} {Products[11].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
@@ -313,7 +319,7 @@ namespace Capstone.Classes
                         case "D1":
                             if (Products[12].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[12].Price);
+                                Balance -= decimal.Parse(Products[12].Price);
                                 Console.WriteLine($"{Products[12].ProductName} {Products[12].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
@@ -327,7 +333,7 @@ namespace Capstone.Classes
                         case "D2":
                             if (Products[13].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[13].Price);
+                                Balance -= decimal.Parse(Products[13].Price);
                                 Console.WriteLine($"{Products[13].ProductName} {Products[13].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
@@ -341,7 +347,7 @@ namespace Capstone.Classes
                         case "D3":
                             if (Products[14].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[14].Price);
+                                Balance -= decimal.Parse(Products[14].Price);
                                 Console.WriteLine($"{Products[14].ProductName} {Products[14].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
@@ -355,7 +361,7 @@ namespace Capstone.Classes
                         case "D4":
                             if (Products[15].Stock > 0)
                             {
-                                Balance -= double.Parse(Products[15].Price);
+                                Balance -= decimal.Parse(Products[15].Price);
                                 Console.WriteLine($"{Products[15].ProductName} {Products[15].Price:C2} {Balance:C2}");
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
@@ -371,7 +377,8 @@ namespace Capstone.Classes
 
                     }
                 } while (!itemSelected);
-                
+                Logger.WriteRecord(purchase);
+
                 PurchaseMenu();
         }
             catch(OutOfStockException oe)
@@ -389,10 +396,13 @@ namespace Capstone.Classes
         }
         public void FinishTransaction()
         {
-            double quarter = 0.25;
-            double dime = 0.10;
-            double nickel = 0.05;
-            Dictionary<double, int> change = new Dictionary<double, int>()
+            Purchase purchase = new Purchase(0);
+
+
+            decimal quarter = 0.25M;
+            decimal dime = 0.10M;
+            decimal nickel = 0.05M;
+            Dictionary<decimal, int> change = new Dictionary<decimal, int>()
             {
                 {quarter, 0 },
                 {dime, 0 },
@@ -400,7 +410,8 @@ namespace Capstone.Classes
             };
             try
             {
-                do
+
+                while (Balance > 0)
                 {
                     if (Balance * 100 % 25 == 0)
                     {
@@ -417,14 +428,20 @@ namespace Capstone.Classes
                         Balance -= nickel;
                         change[nickel]++;
                     }
-                } while (Balance > 0);
+                } 
                 Console.WriteLine($"Your change is {change[quarter]} Quarters, {change[dime]} Dimes, and {change[nickel]} Nickels.");
+                Logger.WriteRecord(purchase);
+                Menu();
             }
             catch(Exception e)
             {
 
             }
+            
         }
-
+        //public string LogData()
+        //{
+        //    return ($"{DateTime.Now} {}");
+        //}
     }
 }
