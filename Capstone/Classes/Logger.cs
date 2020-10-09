@@ -19,7 +19,8 @@ namespace Capstone.Classes
                 using (StreamWriter sw = new StreamWriter(fullPath, true))
                 {
                     sw.WriteLine($"{DateTime.Now} {purchase.LogData()}  ");
-          
+                    sw.Flush();
+                    sw.Close();
                 }
                 success = true;
             }catch (Exception e)

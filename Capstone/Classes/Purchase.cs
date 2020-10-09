@@ -478,7 +478,8 @@ namespace Capstone.Classes
         }
         public string LogData()
         {
-            return ($"{MethodName} {Balance} {Balance-decimal.Parse(Selection.Price)} ");
+            return ($"{MethodName} {Balance}  ");
         }
     }
 }
+//{ Balance - decimal.Parse(Selection.Price)}
