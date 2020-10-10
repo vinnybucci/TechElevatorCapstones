@@ -13,68 +13,8 @@ namespace Capstone.Classes
     public class Purchase : UI
 
     {
-        public decimal Balance { get; set; }
-        public string MethodName { get; set; } = "";
-        List<Product> Products { get; set; } = new List<Product>();
-        public Product Selection { get; set; } = new Product();
-
-        public Purchase(decimal balance, string methodName, Product selection)
-        {
-            Balance = balance;
-            MethodName = methodName;
-            Selection = selection;
-        }
-
-        Logger logger = new Logger();
-        public void Display()
-        {
-            string filePath = @"C:\Users\Student\workspace\Capstones\csharp-capstone-module-1-team-3\vendingmachine.csv";
-            
-
-            try
-            {
-                using (StreamReader sr = new StreamReader(filePath))
-                {
-                    Console.Clear();
-                    if (Products.Count == 16)
-                    {
-
-                        foreach (Product product in Products)
-                        {
-                            if (product.Stock == 0)
-                            {
-                                Console.WriteLine($"{product.SlotLocation} {product.ProductName} {product.Price} quantity remaining: SOLD OUT");
-                            } else
-                            Console.WriteLine($"{product.SlotLocation} {product.ProductName} {product.Price} quantity remaining: {product.Stock}");
-
-                        }
-                    }
-                    else if (Products.Count == 0)
-                    {
-                        while (!sr.EndOfStream)
-                        {
-
-                            string line = sr.ReadLine();
-                            string[] productDetails = line.Split('|');
-                            Product product = new Product(productDetails[0], productDetails[1], productDetails[2], productDetails[3]);
-                            Products.Add(product);
-                        }
-
-                        
-                        foreach (Product product in Products)
-                        {
-                            Console.WriteLine($"{product.SlotLocation} {product.ProductName} {product.Price} quantity remaining: {product.Stock}");
-                        }
-                    }
-                }
-                    
-            }
-            catch (Exception e)
-            {
-
-            }
-        }
-        public void PurchaseMenu()
+        public VendingMachine Vm { get; set; } = new VendingMachine();
+        public override void Menu()
         {
 
             // do
@@ -84,7 +24,7 @@ namespace Capstone.Classes
             Console.WriteLine("2. Select Product");
             Console.WriteLine("3. Finish Transaction");
             Console.WriteLine();
-            Console.WriteLine($"Current money provided {Balance:C2}");
+            Console.WriteLine($"Current money provided {Vm.Balance:C2}");
             string selection = Console.ReadLine();
             try
             {
@@ -114,8 +54,8 @@ namespace Capstone.Classes
         }
         public void FeedMoney()
         {
-            Purchase purchase = new Purchase(0, MethodName, Selection);
 
+            Vm.MethodName = "FEED MONEY:";
             bool continueFeedMoney = false;
             do
             {
@@ -128,20 +68,22 @@ namespace Capstone.Classes
                 else
                 {
                     decimal currentMoneyProvided = decimal.Parse(input);
-                    Balance += currentMoneyProvided;
+                    Vm.Balance += currentMoneyProvided;
+                    Vm.AmountOfChange = currentMoneyProvided;
                     continueFeedMoney = true;
+                    Logger.WriteRecord(Vm);
                 }
             }
             while (continueFeedMoney);
-            MethodName = "FEED MONEY";
-            Logger.WriteRecord(purchase);
-            PurchaseMenu();
+
             
+            Menu();
+
         }
         public void SelectItem()
         {
-            Purchase purchase = new Purchase(0, MethodName, Selection);
-            Display();
+
+            Vm.Display();
             Console.WriteLine("Please enter your item in the format of A1|B1|C1|D1");
             string selection = Console.ReadLine();
 
@@ -153,257 +95,258 @@ namespace Capstone.Classes
                     switch (selection)
                     {
                         case "A1":
-                            if (Products[0].Stock > 0)
+                            if (Vm.Products[0].Stock > 0)
                             {
-                                Selection = Products[0];
 
-                                Balance -= decimal.Parse(Products[0].Price);
-                                Console.WriteLine($"{Products[0].ProductName} {Products[0].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[0].Price);
+                                Console.WriteLine($"{Vm.Products[0].ProductName} {Vm.Products[0].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
-                                Products[0].Stock -= 1;
-                                MethodName = ($"{Products[0].ProductName} {Products[0].SlotLocation}");
-                            }else if(Products[0].Stock == 0)
+                                Vm.Products[0].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[0].ProductName} {Vm.Products[0].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[0].Price);
+                            }
+                            else if (Vm.Products[0].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "A2":
-                            if (Products[1].Stock > 0)
+                            if (Vm.Products[1].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[1].Price);
-                                Console.WriteLine($"{Products[1].ProductName} {Products[1].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[1].Price);
+                                Console.WriteLine($"{Vm.Products[1].ProductName} {Vm.Products[1].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
-                                Products[1].Stock -= 1;
-                                MethodName = ($"{Products[1].ProductName} {Products[1].SlotLocation}");
-
+                                Vm.Products[1].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[1].ProductName} {Vm.Products[1].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[1].Price);
                             }
-                            else if (Products[1].Stock == 0)
+                            else if (Vm.Products[1].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "A3":
-                            if (Products[2].Stock > 0)
+                            if (Vm.Products[2].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[2].Price);
-                                Console.WriteLine($"{Products[2].ProductName} {Products[2].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[2].Price);
+                                Console.WriteLine($"{Vm.Products[2].ProductName} {Vm.Products[2].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
-                                Products[2].Stock -= 1;
-                                MethodName = ($"{Products[2].ProductName} {Products[2].SlotLocation}");
-
+                                Vm.Products[2].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[2].ProductName} {Vm.Products[2].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[2].Price);
                             }
-                            else if (Products[2].Stock == 0)
+                            else if (Vm.Products[2].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "A4":
-                            if (Products[3].Stock > 0)
+                            if (Vm.Products[3].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[3].Price);
-                                Console.WriteLine($"{Products[3].ProductName} {Products[3].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[3].Price);
+                                Console.WriteLine($"{Vm.Products[3].ProductName} {Vm.Products[3].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Crunch Crunch, Yum!");
                                 itemSelected = true;
-                                Products[3].Stock -= 1;
-                                MethodName = ($"{Products[3].ProductName} {Products[3].SlotLocation}");
-
+                                Vm.Products[3].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[3].ProductName} {Vm.Products[3].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[3].Price);
                             }
-                            else if (Products[3].Stock == 0)
+                            else if (Vm.Products[3].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "B1":
-                            if (Products[4].Stock > 0)
+                            if (Vm.Products[4].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[4].Price);
-                                Console.WriteLine($"{Products[4].ProductName} {Products[4].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[4].Price);
+                                Console.WriteLine($"{Vm.Products[4].ProductName} {Vm.Products[4].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
-                                Products[4].Stock -= 1;
-                                MethodName = ($"{Products[4].ProductName} {Products[4].SlotLocation}");
-
+                                Vm.Products[4].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[4].ProductName} {Vm.Products[4].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[4].Price);
                             }
-                            else if (Products[4].Stock == 0)
+                            else if (Vm.Products[4].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "B2":
-                            if (Products[5].Stock > 0)
+                            if (Vm.Products[5].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[5].Price);
-                                Console.WriteLine($"{Products[5].ProductName} {Products[5].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[5].Price);
+                                Console.WriteLine($"{Vm.Products[5].ProductName} {Vm.Products[5].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
-                                Products[5].Stock -= 1;
-                                MethodName = ($"{Products[5].ProductName} {Products[5].SlotLocation}");
-
+                                Vm.Products[5].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[5].ProductName} {Vm.Products[5].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[5].Price);
                             }
-                            else if (Products[5].Stock == 0)
+                            else if (Vm.Products[5].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "B3":
-                            if (Products[6].Stock > 0)
+                            if (Vm.Products[6].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[6].Price);
-                                Console.WriteLine($"{Products[6].ProductName} {Products[6].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[6].Price);
+                                Console.WriteLine($"{Vm.Products[6].ProductName} {Vm.Products[6].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
-                                Products[6].Stock -= 1;
-                                MethodName = ($"{Products[6].ProductName} {Products[6].SlotLocation}");
-
+                                Vm.Products[6].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[6].ProductName} {Vm.Products[6].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[6].Price);
                             }
-                            else if (Products[6].Stock == 0)
+                            else if (Vm.Products[6].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "B4":
-                            if (Products[7].Stock > 0)
+                            if (Vm.Products[7].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[7].Price);
-                                Console.WriteLine($"{Products[7].ProductName} {Products[7].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[7].Price);
+                                Console.WriteLine($"{Vm.Products[7].ProductName} {Vm.Products[7].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Munch Munch, Yum!");
                                 itemSelected = true;
-                                Products[7].Stock -= 1;
-                                MethodName = ($"{Products[7].ProductName} {Products[7].SlotLocation}");
-
+                                Vm.Products[7].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[7].ProductName} {Vm.Products[7].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[7].Price);
                             }
-                            else if (Products[7].Stock == 0)
+                            else if (Vm.Products[7].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "C1":
-                            if (Products[8].Stock > 0)
+                            if (Vm.Products[8].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[8].Price);
-                                Console.WriteLine($"{Products[8].ProductName} {Products[8].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[8].Price);
+                                Console.WriteLine($"{Vm.Products[8].ProductName} {Vm.Products[8].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
-                                Products[8].Stock -= 1;
-                                MethodName = ($"{Products[8].ProductName} {Products[8].SlotLocation}");
-
+                                Vm.Products[8].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[8].ProductName} {Vm.Products[8].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[8].Price);
                             }
-                            else if (Products[8].Stock == 0)
+                            else if (Vm.Products[8].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "C2":
-                            if (Products[9].Stock > 0)
+                            if (Vm.Products[9].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[9].Price);
-                                Console.WriteLine($"{Products[9].ProductName} {Products[9].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[9].Price);
+                                Console.WriteLine($"{Vm.Products[9].ProductName} {Vm.Products[9].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
-                                Products[9].Stock -= 1;
-                                MethodName = ($"{Products[9].ProductName} {Products[9].SlotLocation}");
-
+                                Vm.Products[9].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[9].ProductName} {Vm.Products[9].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[9].Price);
                             }
-                            else if (Products[9].Stock == 0)
+                            else if (Vm.Products[9].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "C3":
-                            if (Products[10].Stock > 0)
+                            if (Vm.Products[10].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[10].Price);
-                                Console.WriteLine($"{Products[10].ProductName} {Products[10].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[10].Price);
+                                Console.WriteLine($"{Vm.Products[10].ProductName} {Vm.Products[10].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
-                                Products[10].Stock -= 1;
-                                MethodName = ($"{Products[10].ProductName} {Products[10].SlotLocation}");
-
+                                Vm.Products[10].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[10].ProductName} {Vm.Products[10].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[10].Price);
                             }
-                            else if (Products[10].Stock == 0)
+                            else if (Vm.Products[10].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "C4":
-                            if (Products[11].Stock > 0)
+                            if (Vm.Products[11].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[11].Price);
-                                Console.WriteLine($"{Products[11].ProductName} {Products[11].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[11].Price);
+                                Console.WriteLine($"{Vm.Products[11].ProductName} {Vm.Products[11].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Glug Glug, Yum!");
                                 itemSelected = true;
-                                Products[11].Stock -= 1;
-                                MethodName = ($"{Products[11].ProductName} {Products[11].SlotLocation}");
-
+                                Vm.Products[11].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[11].ProductName} {Vm.Products[11].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[11].Price);
                             }
-                            else if (Products[11].Stock == 0)
+                            else if (Vm.Products[11].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "D1":
-                            if (Products[12].Stock > 0)
+                            if (Vm.Products[12].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[12].Price);
-                                Console.WriteLine($"{Products[12].ProductName} {Products[12].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[12].Price);
+                                Console.WriteLine($"{Vm.Products[12].ProductName} {Vm.Products[12].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
-                                Products[12].Stock -= 1;
-                                MethodName = ($"{Products[12].ProductName} {Products[12].SlotLocation}");
-
+                                Vm.Products[12].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[12].ProductName} {Vm.Products[12].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[12].Price);
                             }
-                            else if (Products[12].Stock == 0)
+                            else if (Vm.Products[12].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "D2":
-                            if (Products[13].Stock > 0)
+                            if (Vm.Products[13].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[13].Price);
-                                Console.WriteLine($"{Products[13].ProductName} {Products[13].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[13].Price);
+                                Console.WriteLine($"{Vm.Products[13].ProductName} {Vm.Products[13].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
-                                Products[13].Stock -= 1;
-                                MethodName = ($"{Products[13].ProductName} {Products[13].SlotLocation}");
-
+                                Vm.Products[13].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[13].ProductName} {Vm.Products[13].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[13].Price);
                             }
-                            else if (Products[13].Stock == 0)
+                            else if (Vm.Products[13].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "D3":
-                            if (Products[14].Stock > 0)
+                            if (Vm.Products[14].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[14].Price);
-                                Console.WriteLine($"{Products[14].ProductName} {Products[14].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[14].Price);
+                                Console.WriteLine($"{Vm.Products[14].ProductName} {Vm.Products[14].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
-                                Products[14].Stock -= 1;
-                                MethodName = ($"{Products[14].ProductName} {Products[14].SlotLocation}");
-
+                                Vm.Products[14].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[14].ProductName} {Vm.Products[14].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[14].Price);
                             }
-                            else if (Products[14].Stock == 0)
+                            else if (Vm.Products[14].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
                             break;
                         case "D4":
-                            if (Products[15].Stock > 0)
+                            if (Vm.Products[15].Stock > 0)
                             {
-                                Balance -= decimal.Parse(Products[15].Price);
-                                Console.WriteLine($"{Products[15].ProductName} {Products[15].Price:C2} {Balance:C2}");
+                                Vm.Balance -= decimal.Parse(Vm.Products[15].Price);
+                                Console.WriteLine($"{Vm.Products[15].ProductName} {Vm.Products[15].Price:C2} {Vm.Balance:C2}");
                                 Console.WriteLine("Chew Chew, Yum!");
                                 itemSelected = true;
-                                Products[15].Stock -= 1;
-                                MethodName = ($"{Products[15].ProductName} {Products[15].SlotLocation}");
-
+                                Vm.Products[15].Stock -= 1;
+                                Vm.MethodName = ($"{Vm.Products[15].ProductName} {Vm.Products[15].SlotLocation}");
+                                Vm.AmountOfChange = decimal.Parse(Vm.Products[15].Price);
                             }
-                            else if (Products[15].Stock == 0)
+                            else if (Vm.Products[15].Stock == 0)
                             {
                                 throw new OutOfStockException("Item is Sold Out", 0);
                             }
@@ -413,28 +356,26 @@ namespace Capstone.Classes
 
                     }
                 } while (!itemSelected);
-                Logger.WriteRecord(purchase);
+                Logger.WriteRecord(Vm);
 
-                PurchaseMenu();
-        }
-            catch(OutOfStockException oe)
+                Menu();
+            }
+            catch (OutOfStockException oe)
             {
                 Console.WriteLine(oe.Message);
-                PurchaseMenu();
-    }
-            catch(Exception e)
+                Menu();
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("The code you entered is invalid.");
-                PurchaseMenu();
-}
-            
+                Menu();
+            }
+
 
         }
         public void FinishTransaction()
         {
-            Purchase purchase = new Purchase(0, MethodName, Selection);
-
-
+            Vm.AmountOfChange = Vm.Balance;
             decimal quarter = 0.25M;
             decimal dime = 0.10M;
             decimal nickel = 0.05M;
@@ -447,38 +388,38 @@ namespace Capstone.Classes
             try
             {
 
-                while (Balance > 0)
+                while (Vm.Balance > 0)
                 {
-                    if (Balance * 100 % 25 == 0)
+                    if (Vm.Balance * 100 % 25 == 0)
                     {
-                        Balance -= quarter;
+                        Vm.Balance -= quarter;
                         change[quarter]++;
                     }
-                    else if (Balance * 100 % 10 == 0)
+                    else if (Vm.Balance * 100 % 10 == 0)
                     {
-                        Balance -= dime;
+                        Vm.Balance -= dime;
                         change[dime]++;
                     }
-                    else if (Balance * 100 % 5 == 0)
+                    else if (Vm.Balance * 100 % 5 == 0)
                     {
-                        Balance -= nickel;
+                        Vm.Balance -= nickel;
                         change[nickel]++;
                     }
-                } 
+                }
                 Console.WriteLine($"Your change is {change[quarter]} Quarters, {change[dime]} Dimes, and {change[nickel]} Nickels.");
-                MethodName = "GIVE CHANGE";
-                Logger.WriteRecord(purchase);
-                Menu();
+                Vm.MethodName = "GIVE CHANGE:";
+                Logger.WriteRecord(Vm);
+                base.Menu();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }
-            
+
         }
         public string LogData()
         {
-            return ($"{MethodName} {Balance}  ");
+            return ($"{Vm.MethodName} {Vm.Balance}  ");
         }
     }
 }

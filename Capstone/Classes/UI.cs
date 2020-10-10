@@ -9,9 +9,11 @@ namespace Capstone.Classes
     public class UI
     {
 
-        public void Menu()
+        public virtual void Menu()
         {
             Product product = new Product();
+            List<Product> products = new List<Product>();
+            VendingMachine vendingMachine = new VendingMachine();
             bool shouldContinue = false;
             do
             {
@@ -23,15 +25,15 @@ namespace Capstone.Classes
                 string selection = Console.ReadLine();
                 try
                 {
-                    Purchase purchase = new Purchase(0, "", product);
+                    Purchase purchase = new Purchase();
                     if (selection == "1")
                     {
-                        purchase.Display();
+                        vendingMachine.Display();
                         shouldContinue = true;
                     }
                     else if (selection == "2")
                     {
-                        purchase.PurchaseMenu();
+                        purchase.Menu();
                         shouldContinue = true;
                     }
                     else if (selection == "3")
