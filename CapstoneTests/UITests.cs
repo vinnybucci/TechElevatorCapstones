@@ -7,7 +7,7 @@ using System.Text;
 namespace CapstoneTests
 {
     [TestClass]
-    class UITests
+   public class UITests
     {
         [TestMethod]
         public void MenuTest()

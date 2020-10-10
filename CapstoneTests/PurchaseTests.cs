@@ -12,25 +12,27 @@ namespace CapstoneTests
         [TestMethod]
         public void FeedMoneyNull()
         {
-            Product selection = null;
-            Purchase purchase = new Purchase(0, "", selection);
-            Assert.AreEqual(0, purchase.Balance);
+
+            Purchase purchase = new Purchase();
+            Assert.AreEqual(0, purchase.Vm.AmountOfChange);
             
         }
         [TestMethod]
         public void FeedMoney5()
         {
-            Product selection = null;
-            Purchase purchase = new Purchase(0, "", selection);
-            int input = 5;
-            int expected = 5;
-            Assert.AreEqual(expected, input);
+            Purchase purchase = new Purchase();
+            purchase.Vm.Balance = 5;
+            purchase.Vm.AmountOfChange = 10;
+            decimal expected = purchase.Vm.Balance+purchase.Vm.AmountOfChange;
+            purchase.FeedMoney();
+            
+           // Assert.AreEqual(expected, purchase.FeedMoney());
         }
         [TestMethod]
         public void FeedMoney2()
         {
-            Product selection = null;
-            Purchase purchase = new Purchase(0, "", selection);
+            Purchase purchase = new Purchase();
+
             int input = 2;
             int expected = 2;
             Assert.AreEqual(expected, input);
@@ -39,7 +41,6 @@ namespace CapstoneTests
         public void FeedMoney1()
         {
             Product selection = null;
-            Purchase purchase = new Purchase(0, "", selection);
             int input = 1;
             int expected = 1;
             Assert.AreEqual(expected, input);
@@ -48,7 +49,7 @@ namespace CapstoneTests
         public void FeedMoney10()
         {
             Product selection = null;
-            Purchase purchase = new Purchase(0, "", selection);
+            Purchase purchase = new Purchase();
             int input = 10;
             int expected = 10;
             Assert.AreEqual(expected, input);
@@ -75,7 +76,6 @@ namespace CapstoneTests
         public void SelectingItemTest()
         {
             Product selection = null;
-            Purchase purchase = new Purchase(0, "", selection);
             string itemSelected = "A1";
            // string expected = purchase.ToString(purchase.Selection.ProductName[0]);
         }
@@ -83,7 +83,6 @@ namespace CapstoneTests
         public void StockOnItem()
         {
             Product selection = null;
-            Purchase purchase = new Purchase(0, "", selection);
             int expected = 0;
             string input = selection.Stock.ToString();
             Assert.AreEqual(expected, input);
@@ -92,15 +91,9 @@ namespace CapstoneTests
         public void StockOnItem0()
         {
             Product selection = null;
-            Purchase purchase = new Purchase(0, "", selection);
             int expected = 0;
             string input = selection.Stock.ToString();
             Assert.AreEqual(expected, input);
         }
     }
 }
-//public void DisplayMenu()
-//    public void FinishTranscation()
-//    public void SelectItem()
-//    public void FeedMoney()
-//    public void PurchaseMenu()

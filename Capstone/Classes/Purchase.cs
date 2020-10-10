@@ -57,28 +57,39 @@ namespace Capstone.Classes
 
             Vm.MethodName = "FEED MONEY:";
             bool continueFeedMoney = false;
-            do
+            try
             {
-                Console.WriteLine("Insert money (Accepts $1, $2, $5, or $10) or press F to return");
-                string input = Console.ReadLine();
-                if (input.ToLower() == "f")
+                do
                 {
-                    continueFeedMoney = false;
+                    Console.WriteLine("Insert money (Accepts $1, $2, $5, or $10) or press F to return");
+                   string input = Console.ReadLine();
+                    if (input.ToLower() == "f")
+                    {
+                        continueFeedMoney = false;
+                    }
+                    else if (input == "1" || input == "2" || input == "5" || input == "10")
+                    {
+                        decimal currentMoneyProvided = decimal.Parse(input);
+                        Vm.Balance += currentMoneyProvided;
+                        Vm.AmountOfChange = currentMoneyProvided;
+                        continueFeedMoney = true;
+                        Logger.WriteRecord(Vm);
+                    }
+                    else
+                    {
+                        throw new Exception();
+                    }
                 }
-                else
-                {
-                    decimal currentMoneyProvided = decimal.Parse(input);
-                    Vm.Balance += currentMoneyProvided;
-                    Vm.AmountOfChange = currentMoneyProvided;
-                    continueFeedMoney = true;
-                    Logger.WriteRecord(Vm);
-                }
+                while (continueFeedMoney);
+
             }
-            while (continueFeedMoney);
-
-            
+            catch (Exception e) 
+            {
+                Console.WriteLine("Please enter $1, $2, $5, or $10.");
+                continueFeedMoney = true;
+            }
             Menu();
-
+           
         }
         public void SelectItem()
         {

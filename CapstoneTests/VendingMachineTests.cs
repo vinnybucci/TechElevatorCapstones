@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Capstone.Classes;
 
 namespace CapstoneTests
 {
-    class VendingMachineTests
+   public class VendingMachineTests
     {
         
     }
