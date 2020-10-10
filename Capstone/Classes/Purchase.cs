@@ -30,7 +30,7 @@ namespace Capstone.Classes
             {
                 if (selection == "1")
                 {
-                    FeedMoney();
+                    FeedMoney("");
                     ///  shouldContinue = true;
                 }
                 else if (selection == "2")
@@ -52,9 +52,8 @@ namespace Capstone.Classes
             //} while (shouldContinue);
 
         }
-        public void FeedMoney()
+        public string FeedMoney(string currentMoneyProvided)
         {
-
             Vm.MethodName = "FEED MONEY:";
             bool continueFeedMoney = false;
             try
@@ -63,24 +62,26 @@ namespace Capstone.Classes
                 {
                     Console.WriteLine("Insert money (Accepts $1, $2, $5, or $10) or press F to return");
                    string input = Console.ReadLine();
-                    if (input.ToLower() == "f")
+                    currentMoneyProvided = (input);
+
+                    if (currentMoneyProvided.ToLower() == "f")
                     {
-                        continueFeedMoney = false;
-                    }
-                    else if (input == "1" || input == "2" || input == "5" || input == "10")
-                    {
-                        decimal currentMoneyProvided = decimal.Parse(input);
-                        Vm.Balance += currentMoneyProvided;
-                        Vm.AmountOfChange = currentMoneyProvided;
                         continueFeedMoney = true;
+                    }
+                    else if (currentMoneyProvided == "1" || currentMoneyProvided == "2" || currentMoneyProvided == "5" || currentMoneyProvided == "10")
+                    {
+                        Vm.Balance += decimal.Parse(currentMoneyProvided);
+                        Vm.AmountOfChange = decimal.Parse(currentMoneyProvided);
+                        continueFeedMoney = false;
                         Logger.WriteRecord(Vm);
+                       
                     }
                     else
                     {
                         throw new Exception();
                     }
                 }
-                while (continueFeedMoney);
+                while (!continueFeedMoney);
 
             }
             catch (Exception e) 
@@ -89,9 +90,9 @@ namespace Capstone.Classes
                 continueFeedMoney = true;
             }
             Menu();
-           
+            return currentMoneyProvided;
         }
-        public void SelectItem()
+        public bool SelectItem()
         {
 
             Vm.Display();
@@ -374,18 +375,21 @@ namespace Capstone.Classes
             catch (OutOfStockException oe)
             {
                 Console.WriteLine(oe.Message);
+                itemSelected = false;
                 Menu();
             }
             catch (Exception e)
             {
                 Console.WriteLine("The code you entered is invalid.");
+                itemSelected = false;
                 Menu();
             }
-
+            return itemSelected;
 
         }
-        public void FinishTransaction()
+        public bool FinishTransaction()
         {
+            bool finishingTransaction = false;
             Vm.AmountOfChange = Vm.Balance;
             decimal quarter = 0.25M;
             decimal dime = 0.10M;
@@ -420,13 +424,14 @@ namespace Capstone.Classes
                 Console.WriteLine($"Your change is {change[quarter]} Quarters, {change[dime]} Dimes, and {change[nickel]} Nickels.");
                 Vm.MethodName = "GIVE CHANGE:";
                 Logger.WriteRecord(Vm);
+                finishingTransaction = true;
                 base.Menu();
             }
             catch (Exception e)
             {
-
+                finishingTransaction = false;
             }
-
+            return finishingTransaction;
         }
         public string LogData()
         {
