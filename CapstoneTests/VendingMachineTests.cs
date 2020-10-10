@@ -6,5 +6,6 @@ namespace CapstoneTests
 {
     class VendingMachineTests
     {
+        
     }
 }
