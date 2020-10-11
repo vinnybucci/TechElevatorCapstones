@@ -18,6 +18,7 @@ namespace Capstone.Classes
         {
 
             // do
+            Console.Clear();
             Console.WriteLine();
             Console.WriteLine("1. Feed Money");
 
@@ -104,7 +105,7 @@ namespace Capstone.Classes
             {
                 do
                 {
-                    switch (selection)
+                    switch (selection.ToUpper())
                     {
                         case "A1":
                             if (Vm.Products[0].Stock > 0)
@@ -369,7 +370,7 @@ namespace Capstone.Classes
                     }
                 } while (!itemSelected);
                 Logger.WriteRecord(Vm);
-
+                Console.ReadKey();
                 Menu();
             }
             catch (OutOfStockException oe)

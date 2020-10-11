@@ -17,6 +17,7 @@ namespace Capstone.Classes
             bool shouldContinue = false;
             do
             {
+                Console.WriteLine();
                 Console.WriteLine("Welcome to Vendo-Matic 3000!");
                 Console.WriteLine();
                 Console.WriteLine("1. Display Products");
@@ -39,6 +40,7 @@ namespace Capstone.Classes
                     else if (selection == "3")
                     {
                         shouldContinue = false;
+                        return;
                     }
                     else if (selection == "4")
                     {
