@@ -377,12 +377,14 @@ namespace Capstone.Classes
             {
                 Console.WriteLine(oe.Message);
                 itemSelected = false;
+                Console.ReadLine();
                 Menu();
             }
             catch (Exception e)
             {
                 Console.WriteLine("The code you entered is invalid.");
                 itemSelected = false;
+                Console.ReadLine();
                 Menu();
             }
             return itemSelected;
